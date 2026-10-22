@@ -1,0 +1,22 @@
+name: Listar commits
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  listar-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Mostrar commits
+        run: git log --pretty=format:"%h | %an | %ad | %s" --date=short
+
+      - name: Publicar no resumo
+        run: |
+          echo "## Commits do repositório" >> $GITHUB_STEP_SUMMARY
+          git log --pretty=format:"- \`%h\` %s (%an)" >> $GITHUB_STEP_SUMMARY
